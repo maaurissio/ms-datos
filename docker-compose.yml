@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: msdatos-postgres
+    environment:
+      POSTGRES_DB: msdatos
+      POSTGRES_USER: msdatos
+      POSTGRES_PASSWORD: msdatos
+    ports:
+      - "5432:5432"
+    volumes:
+      - msdatos-pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: msdatos-api
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: msdatos
+      DB_USER: msdatos
+      DB_PASSWORD: msdatos
+    ports:
+      - "8080:8080"
+
+volumes:
+  msdatos-pgdata:
