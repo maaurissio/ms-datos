@@ -14,7 +14,14 @@ Microservicio para consolidar datos por sucursal, tipo y periodo, con trazabilid
 docker compose up --build
 ```
 
-La API queda disponible en `http://localhost:8080`.
+La API queda disponible en `http://localhost:8083`.
+
+## Swagger UI
+
+La especificación OpenAPI y Swagger UI están siempre disponibles (incluso en producción):
+
+- Swagger UI: `http://localhost:8083/q/swagger-ui/`
+- OpenAPI spec: `http://localhost:8083/q/openapi`
 
 ## Endpoints principales
 
@@ -53,3 +60,45 @@ La conexion a PostgreSQL se controla via variables de entorno:
 - `DB_PASSWORD` (default: `msdatos`)
 
 Flyway se ejecuta automaticamente al iniciar la aplicacion.
+
+## Ejecutar en otra maquina
+
+### Opcion 1: Docker Compose (recomendada)
+
+1. Instalar Docker y Docker Compose en la maquina destino.
+2. Clonar o copiar la carpeta del proyecto.
+3. Ejecutar:
+
+```shell
+docker compose up --build
+```
+
+La base de datos se crea limpia y las migraciones Flyway se aplican automaticamente.
+
+### Opcion 2: Desarrollo local
+
+1. Instalar Java 21, Maven 3.9+ y PostgreSQL 16.
+2. Crear la base de datos `msdatos` en PostgreSQL.
+3. Configurar variables de entorno (o usar defaults) segun `application.properties`.
+4. Ejecutar:
+
+```shell
+mvn quarkus:dev
+```
+
+La aplicacion se levanta en `http://localhost:8083` con recarga en caliente.
+
+### Migrar datos existentes a otra maquina
+
+Si ya tienes datos en la maquina original y quieres llevarlos a otra:
+
+**Exportar (maquina origen):**
+```shell
+docker compose exec postgres pg_dump -U msdatos msdatos > datos.sql
+```
+
+**Importar (maquina destino):**
+```shell
+docker compose cp datos.sql msdatos-postgres:/datos.sql
+docker compose exec postgres psql -U msdatos -d msdatos -f /datos.sql
+```

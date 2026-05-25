@@ -1,0 +1,7 @@
+ALTER TABLE dato_consolidado ALTER COLUMN tipo_dato TYPE VARCHAR(30);
+ALTER TABLE dato_consolidado ALTER COLUMN estado TYPE VARCHAR(30);
+ALTER TABLE log_carga ALTER COLUMN estado TYPE VARCHAR(30);
+ALTER TABLE dato_consolidado ALTER COLUMN periodo TYPE date;
+
+DROP TYPE IF EXISTS tipo_dato CASCADE;
+DROP TYPE IF EXISTS estado_carga CASCADE;

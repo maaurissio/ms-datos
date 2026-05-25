@@ -23,7 +23,7 @@ services:
       DB_USER: msdatos
       DB_PASSWORD: msdatos
     ports:
-      - "8080:8080"
+      - "8083:8083"
 
 volumes:
   msdatos-pgdata:
